@@ -28,6 +28,14 @@ module.exports = {
       });
       m.react(helpers.Success);
       require("fs").unlinkSync(gas);
+    } else if (/video/.test(m.mtype) || m.type == "videoMessage") {
+      if (m.qmsg.videoMessage.seconds > 11) return m.reply("Maksimal 10 detik");
+      let media = await conn.downloadMediaMessage(m.qmsg || m.msg);
+      console.log(media);
+      let gas = await conn.sendVideoAsSticker(m.chat, media, m);
+      m.react(helpers.Success);
+
+      require("fs").unlinkSync(gas);
     }
   },
 };
